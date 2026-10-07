@@ -28,7 +28,7 @@
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 
 body {
   margin: 0;
@@ -71,8 +71,9 @@ h1 { margin: 0 0 20px; font: 700 clamp(2.4rem, 5.4vw, 3.6rem)/1.02 var(--display
 .alert { display: block; margin: 22px 0 0; padding: 12px 14px; border-left: 3px solid var(--amber); background: #231d0d; color: #f4dc9b; font-size: .94rem; }
 
 /* Pasos */
-.step { display: grid; grid-template-columns: 60px minmax(0, 1fr); border-top: 1px solid var(--line); padding: 40px 0 44px; }
+.step { scroll-margin-top: 64px; display: grid; grid-template-columns: 60px minmax(0, 1fr); border-top: 1px solid var(--line); padding: 40px 0 44px; }
 .num { font: 700 1.9rem/1 var(--display); color: var(--amber); letter-spacing: -.02em; }
+.body { min-width: 0; }
 h2 { margin: 2px 0 18px; font: 700 1.55rem/1.15 var(--display); letter-spacing: -.01em; }
 h3 { margin: 0 0 14px; font: .74rem/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--paper); }
 h3 span { letter-spacing: 0; text-transform: none; color: var(--faint); margin-left: 8px; font-size: .78rem; }
@@ -159,7 +160,7 @@ input.invalid { border-color: var(--red); }
 /* Terminal */
 .term { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: #090c0a; margin-bottom: 14px; }
 .term-bar { display: flex; align-items: center; justify-content: space-between; padding: 6px 8px 6px 14px; background: var(--ink-2); border-bottom: 1px solid var(--line); font: .74rem var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--faint); }
-pre { margin: 0; padding: 14px 16px; overflow-x: auto; font: .86rem/1.6 var(--mono); color: #d8e3da; }
+pre { margin: 0; padding: 14px 16px; overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; font: .86rem/1.6 var(--mono); color: #d8e3da; }
 
 /* Vista previa */
 .stage { position: sticky; top: 52px; align-self: start; padding: 64px 0 40px; display: flex; flex-direction: column; align-items: center; }
@@ -186,9 +187,9 @@ pre { margin: 0; padding: 14px 16px; overflow-x: auto; font: .86rem/1.6 var(--mo
 figcaption { display: flex; justify-content: space-between; align-items: baseline; margin-top: 18px; padding: 0 4px; }
 figcaption strong { font: 700 1.05rem var(--display); }
 figcaption span { font: .78rem var(--mono); color: var(--faint); }
-.dots { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; justify-content: center; }
-.dots button { width: 18px; height: 5px; padding: 0; border: 0; border-radius: 2px; background: var(--line-2); cursor: pointer; transition: background .2s, width .2s; }
-.dots button[aria-selected=true] { background: var(--amber); width: 30px; }
+.dots { display: flex; gap: 6px; margin-top: 2px; flex-wrap: wrap; justify-content: center; }
+.dots button { width: 18px; height: 25px; padding: 10px 0; border: 0; border-radius: 2px; background: var(--line-2); background-clip: content-box; cursor: pointer; transition: background .2s, width .2s; }
+.dots button[aria-selected=true] { background: var(--amber); background-clip: content-box; width: 30px; }
 .orient { display: inline-flex; margin-top: 16px; border: 1px solid var(--line-2); border-radius: 6px; overflow: hidden; }
 .orient button { height: 32px; padding: 0 16px; border: 0; background: transparent; color: var(--dim); font: .8rem var(--mono); cursor: pointer; }
 .orient button + button { border-left: 1px solid var(--line-2); }
@@ -199,30 +200,95 @@ figcaption span { font: .78rem var(--mono); color: var(--faint); }
 .foot { max-width: 1180px; margin: 0 auto; padding: 28px 24px 56px; border-top: 1px solid var(--line); color: var(--faint); font-size: .82rem; }
 .foot p { margin: 0; max-width: 78ch; }
 
-/* Móvil */
-@media (max-width: 980px) {
-  .frame { grid-template-columns: minmax(0, 1fr); gap: 0; padding: 0 18px; }
-  .stage { position: static; order: -1; padding: 28px 0 0; }
-  .device { max-width: 330px; }
-  .stage-note { margin-bottom: 0; }
-  .intro { padding: 32px 0 30px; }
-  .top-in, .foot { padding-left: 18px; padding-right: 18px; }
+/* ---------- Adaptación a cada pantalla ---------- */
+
+/* Márgenes seguros en móviles con muesca o esquinas redondeadas */
+.top-in, .frame, .foot {
+  padding-left: max(24px, env(safe-area-inset-left));
+  padding-right: max(24px, env(safe-area-inset-right));
 }
+code { overflow-wrap: anywhere; }
+
+/* Portátiles pequeños y tablets en horizontal: la vista previa se queda al lado, más estrecha */
+@media (max-width: 1100px) {
+  .frame { grid-template-columns: minmax(0, 1fr) 300px; gap: 40px; }
+  .intro { padding-top: 48px; }
+  .stage { padding-top: 48px; }
+}
+
+/* Tablets en vertical y móviles: una sola columna con la placa arriba */
+@media (max-width: 820px) {
+  .frame { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .stage { position: static; order: -1; padding: 28px 0 0; }
+  .device { max-width: 320px; }
+  .stage-note { margin-bottom: 0; }
+  .intro { padding: 30px 0 30px; }
+  .lead { max-width: 60ch; }
+  .top-in, .frame, .foot { padding-left: max(20px, env(safe-area-inset-left)); padding-right: max(20px, env(safe-area-inset-right)); }
+  /* 16 px evita el zoom automático de iOS al pulsar un campo */
+  input:not([type=radio]), input.mono { font-size: 16px; }
+}
+
+/* Móviles */
 @media (max-width: 560px) {
+  .top-in, .frame, .foot { padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
   .device { max-width: 250px; }
   .board { padding: 16px 16px 26px; }
   .pivot { aspect-ratio: 1.1; }
-  .step { grid-template-columns: 1fr; padding: 32px 0 36px; }
-  .num { margin-bottom: 8px; }
-  .row { grid-template-columns: 1fr; gap: 0; }
-  .ed { grid-template-columns: 22px 1fr; row-gap: 10px; }
+  .step { grid-template-columns: minmax(0, 1fr); padding: 30px 0 34px; }
+  .num { margin-bottom: 6px; }
+  h2 { font-size: 1.35rem; }
+  .row { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .ed { grid-template-columns: 22px minmax(0, 1fr); row-gap: 10px; padding: 14px; }
   .ed-logos { grid-column: 2; justify-self: start; padding: 0 14px; }
-  .ed-text { grid-column: 2; }
-  .ed-count { grid-column: 2; }
+  .ed-text, .ed-count { grid-column: 2; }
   .go { width: 100%; justify-content: center; }
-  .actions esp-web-install-button { flex: 1 1 100%; }
-  .summary { grid-template-columns: 1fr; gap: 0; }
+  .actions { flex-direction: column; align-items: stretch; gap: 8px; }
+  .actions esp-web-install-button { display: block; }
+  .actions .link { width: 100%; text-align: center; }
+  .summary { grid-template-columns: minmax(0, 1fr); gap: 0; padding: 14px 16px; }
   .summary dt { margin-top: 8px; }
+  .with-btn { flex-wrap: wrap; }
+  .with-btn input { flex: 1 1 100%; }
+  .with-btn .mini { flex: 1; }
+  .with-btn:has([data-toggle]) input { flex: 1 1 0; }
+  .with-btn:has([data-toggle]) .mini { flex: 0 0 auto; }
+  pre { font-size: .8rem; }
+  .term-bar { letter-spacing: .02em; }
+}
+
+/* Móviles muy pequeños */
+@media (max-width: 380px) {
+  h1 { font-size: 2.1rem; }
+  .eyebrow { font-size: .7rem; letter-spacing: .1em; }
+  .device { max-width: 220px; }
+  .needs { gap: 4px 16px; }
+  .ed-text small { display: none; }
+}
+
+/* Móviles en horizontal (poca altura): la placa se achica y deja de ser fija */
+@media (max-height: 520px) and (orientation: landscape) {
+  .stage { position: static; padding-top: 18px; }
+  .device { max-width: 240px; }
+  .top { position: static; }
+  .step { scroll-margin-top: 12px; }
+}
+
+/* Pantallas táctiles: objetivos de pulsación de al menos 44 px */
+@media (pointer: coarse) {
+  .orient button { height: 44px; padding: 0 20px; }
+  .mini { min-width: 56px; }
+  .link { padding: 12px 0; }
+  .help summary { padding: 10px 0; }
+  .top nav a { padding: 12px 4px; }
+  .ed { padding-top: 16px; padding-bottom: 16px; }
+}
+
+/* Pantallas muy grandes: el contenido sigue centrado y algo más holgado */
+@media (min-width: 1500px) {
+  .frame, .top-in, .foot { max-width: 1280px; }
+  .frame { gap: 88px; grid-template-columns: minmax(0, 680px) minmax(360px, 1fr); }
+  .device { max-width: 420px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

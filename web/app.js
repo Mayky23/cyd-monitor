@@ -213,7 +213,11 @@ function flash(button, text) {
 
 /* ---------- Eventos ---------- */
 
-if (!("serial" in navigator)) $("unsupported").hidden = false;
+if (!("serial" in navigator)) {
+  const touch = matchMedia("(pointer: coarse)").matches;
+  $("unsupported").hidden = false;
+  for (const note of document.querySelectorAll("#unsupported [data-for]")) note.hidden = (note.dataset.for === "touch") !== touch;
+}
 
 for (const id of fields) {
   $(id).addEventListener("input", () => {

@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>CYD Monitor Installer</title>
   <meta name="description" content="Carga el firmware de CYD Monitor en tu ESP32-2432S028R desde el navegador.">
   <meta name="theme-color" content="#101311">
@@ -35,7 +35,8 @@
           <li>Una Raspberry Pi, un Proxmox o ambos</li>
         </ul>
         <p class="alert" id="unsupported" role="alert" hidden>
-          Este navegador no puede hablar con la placa por USB. Abre esta página con <strong>Chrome</strong>, <strong>Edge</strong> u <strong>Opera</strong> en un ordenador.
+          <span data-for="desktop">Este navegador no puede hablar con la placa por USB. Abre esta página con <strong>Chrome</strong>, <strong>Edge</strong> u <strong>Opera</strong> en un ordenador.</span>
+          <span data-for="touch">Desde un móvil o una tablet no se puede cargar la placa por USB. Aquí puedes preparar los datos y copiar los comandos de la API; para instalar el firmware abre esta página en un ordenador con <strong>Chrome</strong>, <strong>Edge</strong> u <strong>Opera</strong>.</span>
         </p>
       </section>
 

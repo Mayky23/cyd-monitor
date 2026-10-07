@@ -1,0 +1,22 @@
+# Local credentials and private backups
+.env
+backup/
+BACKUP/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Generated site
+site/
+
+# Editors and OS
+.vscode/.browse.c_cpp_db*
+.vscode/ipch/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.log
